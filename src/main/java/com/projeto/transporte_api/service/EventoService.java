@@ -4,6 +4,7 @@ import com.projeto.transporte_api.dto.EventoRequestDTO;
 import com.projeto.transporte_api.dto.EventoResponseDTO;
 import com.projeto.transporte_api.entity.EncomendaEntity;
 import com.projeto.transporte_api.entity.EventoEntity;
+import com.projeto.transporte_api.entity.StatusEncomenda;
 import com.projeto.transporte_api.infrastructure.EncomendaNotFoundException;
 import com.projeto.transporte_api.repository.EncomendaRepository;
 import com.projeto.transporte_api.repository.EventoRepository;
@@ -24,6 +25,12 @@ public class EventoService {
         EncomendaEntity encomenda = encomendaRepository.findByCodigoDeRastreio(dto.codigoDeRastreio())
                 .orElseThrow(() -> new EncomendaNotFoundException("Encomenda não encontrada: " + dto.codigoDeRastreio()));
 
+        if (encomenda.getStatus() == StatusEncomenda.ENTREGUE) {
+            throw new RuntimeException("Encomenda já foi entregue e não pode ser alterada.");
+        }
+
+
+
         EventoEntity evento = new EventoEntity();
         evento.setEncomenda(encomenda);
         evento.setCidadeHistorico(dto.cidade());
@@ -31,6 +38,10 @@ public class EventoService {
         evento.setDataEHoraHistorico(OffsetDateTime.now());
 
         encomenda.setStatus(dto.statusEncomenda());
+        if (dto.statusEncomenda() == StatusEncomenda.ENTREGUE) {
+                encomenda.setDataEntrega(OffsetDateTime.now());
+        }
+        
         encomendaRepository.save(encomenda);
 
         eventoRepository.save(evento);
