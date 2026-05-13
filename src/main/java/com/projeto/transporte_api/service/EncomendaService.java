@@ -3,9 +3,11 @@ package com.projeto.transporte_api.service;
 import com.projeto.transporte_api.dto.EncomendaRequestDTO;
 import com.projeto.transporte_api.dto.EncomendaResponseDTO;
 import com.projeto.transporte_api.entity.EncomendaEntity;
+import com.projeto.transporte_api.entity.EventoEntity;
 import com.projeto.transporte_api.entity.StatusEncomenda;
 import com.projeto.transporte_api.infrastructure.EncomendaNotFoundException;
 import com.projeto.transporte_api.repository.EncomendaRepository;
+import com.projeto.transporte_api.repository.EventoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,8 @@ public class EncomendaService {
 
     private final EncomendaRepository encomendaRepository;
 
+    private final EventoRepository eventoRepository;
+
     public EncomendaResponseDTO criar(EncomendaRequestDTO dto) {
         EncomendaEntity encomenda = new EncomendaEntity();
         encomenda.setRemetente(dto.remetente());
@@ -26,7 +30,17 @@ public class EncomendaService {
         encomenda.setCodigoDeRastreio(UUID.randomUUID().toString().substring(0, 8).toUpperCase());
         encomenda.setDataDeCriacao(OffsetDateTime.now());
         encomendaRepository.save(encomenda);
+
+        EventoEntity eventoInicial = new EventoEntity();
+        eventoInicial.setEncomenda(encomenda);
+        eventoInicial.setCidadeHistorico("Origem");
+        eventoInicial.setStatusEncomendaHistorico(StatusEncomenda.COLETADO);
+        eventoInicial.setDataEHoraHistorico(OffsetDateTime.now());
+
+        eventoRepository.save(eventoInicial);
+
         return toResponse(encomenda);
+
     }
 
     public EncomendaResponseDTO buscarPorCodigo(String codigo) {
