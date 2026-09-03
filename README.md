@@ -2,20 +2,6 @@
 
 API REST para rastreamento de encomendas, inspirada no modelo dos Correios. Permite criar encomendas, registrar movimentações e consultar o histórico completo de uma encomenda pelo código de rastreio.
 
-## Deploy
-
-A API está disponível em produção:
-
-```
-https://transporte-api-production-df09.up.railway.app
-```
-
-A documentação interativa com Swagger está disponível em:
-
-```
-https://transporte-api-production-df09.up.railway.app/swagger-ui.html
-```
-
 ---
 
 ## Tecnologias
