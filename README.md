@@ -12,8 +12,6 @@ API REST para rastreamento de encomendas, inspirada no modelo dos Correios. Perm
 - PostgreSQL
 - Lombok
 - Swagger
-- Railway
-
 ---
 
 ## Endpoints
@@ -131,7 +129,7 @@ GET /encomendas/{codigo}/eventos
 
 **1. Clone o repositório:**
 ```bash
-git clone https://github.com/seu-usuario/transporte-api.git
+git clone https://github.com/JuanMarquesJM/transporte-api.git
 cd transporte-api
 ```
 
